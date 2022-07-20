@@ -1,0 +1,27 @@
+@import "css/fonts.css";
+@import "css/header.css";
+@import "css/videomark.css";
+@import "css/footer.css";
+@import "css/animation.css";
+
+*{
+    margin : 0;
+    padding : 0;
+}
+
+body, html{
+    font-family: MainFont;
+    min-height: 580px;
+    min-width: 600px;
+    background-color: whitesmoke;
+    height : 100%;
+    background-color: rgb(228, 231, 231);
+    overflow: hidden;
+}
+
+
+
+
+
+
+

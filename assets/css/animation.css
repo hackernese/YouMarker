@@ -1,0 +1,55 @@
+
+@keyframes fade_header {
+    from{
+        opacity: 1;
+        display : block;
+    }
+    to{
+        opacity: 0;
+        transform: translateY(-5.1rem);
+        display : none;
+    }
+}
+
+@keyframes fade_footer {
+    from{
+        opacity: 1;
+        display : block;
+    }to{
+        opacity: 0;
+        transform: translateY(5.1rem);
+        display : none;
+    }  
+}
+
+@keyframes fade_bookmarks {
+    from{
+        opacity: 1;
+        display : block;
+    }to{
+        opacity: 0;
+        display : none;
+    }
+}
+
+@keyframes fade_item {
+    from{
+    
+    }to{
+        transform: translateX(-11.1rem);
+
+    }
+}
+
+.fade_out_header{
+    animation : fade_header 0.6s forwards;
+}
+.fade_out_footer{
+    animation : fade_footer 0.6s forwards;
+}
+.fade_out_middle{
+    animation : fade_bookmarks 1s forwards;
+}
+.fade_item_out{
+    animation : fade_item 0.6s forwards;
+}

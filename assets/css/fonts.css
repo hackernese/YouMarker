@@ -1,0 +1,13 @@
+@font-face {
+    font-family: MainFont;
+    src: url(../fonts/Oxygen-Regular.ttf);
+}
+@font-face {
+    font-family: HeaderFont;
+    src: url(../fonts/Quicksand_Bold.otf);
+}
+@font-face {
+    font-family: ThirdFont;
+    src: url(../fonts/Exo-Medium.otf);
+}
+

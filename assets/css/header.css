@@ -1,0 +1,169 @@
+
+
+.header{
+    display : flex;
+    flex-direction: row;
+    background-color: rgb(46, 51, 49);
+    height : 12%;
+    
+}
+
+.header #heading{
+    font-family: HeaderFont;
+    font-size:22px;
+    color : white;
+    letter-spacing: 3px;
+}
+
+
+.header #heading::after{
+    content : "";
+    position: absolute;
+    width: 0;
+    margin-top: 5px;
+    background-color: #fcbd51;
+    height : 3px;
+    border-radius: 5px 5px 5px 5px;
+    transition: 0.3s;
+}
+
+
+.header #heading:hover{
+    
+    color : #fcbd51;
+    cursor: pointer;
+
+    -webkit-filter: 
+    drop-shadow(7px 5px 4px #ffffff4f)
+    brightness(1.2);
+    filter: 
+    drop-shadow(7px 5px 4px #ffffff4f)
+    brightness(1.2);
+
+}
+
+.header #heading:hover::after{
+    width : 172px;
+}
+
+.header img:hover{
+    -webkit-filter: 
+    drop-shadow(5px 5px 4px #ffffff4f)
+    saturate(2)
+    brightness(1.2);
+    filter: 
+    drop-shadow(5px 5px 4px #ffffff4f)
+    saturate(2)
+    brightness(1.2);
+
+    cursor: pointer;
+}
+.header img{
+    z-index: 1000;
+}
+
+.header #icon{
+    width : 65px;
+    height: 75px;
+    animation : load_icon 0.8s forwards;
+}
+.header #about{
+    filter: invert(100%);
+    -webkit-filter: invert(100%);
+    width : 25px;
+    height : 25px;
+    padding : 2px;
+    border-radius: 50%;
+}
+.header > div:nth-child(2){
+    flex : 1;
+    display : flex;
+    justify-content: center;
+    flex-direction: column;
+    user-select: none;
+    width : 20px;
+}
+@keyframes load_icon{
+    from{
+        width : 78px;
+        height: 40px;
+    }
+    to{
+        width : 78px;
+        height: 89px;
+    }
+}
+
+
+.header > div:nth-child(3) label{
+    color : azure;
+    font-family: HeaderFont;
+    font-size: 20px;
+    margin-top : auto;
+    margin-bottom : auto;
+    margin-left: 5px;
+
+    display : none;
+
+}
+
+.header > div:nth-child(2):hover{
+    cursor: pointer;
+}
+
+.header > div:nth-child(3){
+    flex-grow: 2;
+    display : flex;
+    justify-content: right;
+    margin : auto;
+    padding-right: 20px;
+}
+
+@keyframes hover_about {
+    from{
+        display : none;
+    }
+    to{
+        display : block;
+        background-color: white;
+        filter: invert(0%);
+        -webkit-filter: invert(0%);
+    }
+}
+
+@keyframes hoverlabel_about {
+    from{
+        display : none;
+        opacity: 0.1;
+    }
+    to{
+        display : block;
+        opacity: 1;
+    }
+}
+
+
+.about-hover:hover{
+    animation : hover_about 0.5s forwards;
+    cursor: pointer;
+}
+
+@keyframes transfer_about_to_back {
+    
+    0%{
+        transform: rotate(0);
+    }
+    90%{
+        transform: rotate(180deg);
+    }
+    100%{
+        content: url(../img/back.png);
+        filter: invert(100%);
+        -webkit-filter: invert(100%);
+        transform: rotate(180deg);
+    }
+}
+
+.back-btn{
+    animation : transfer_about_to_back 1s forwards;
+}

@@ -1,0 +1,336 @@
+
+
+.dmark-root-div, .add-mark-div{
+    display : flex;
+    flex-direction: column;
+}
+
+.ymark-div2{
+    flex : 1;
+    flex-grow: 3;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height : 80%;
+    display : flex;;
+    justify-content: space-evenly;
+    font-family: "YouTube Sans";
+    
+}
+.ymark-div2 .d{
+
+    width: 100%;
+    height : 100%;
+    margin: auto 0;
+    flex-direction: column;
+    
+    display : flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    text-align: center;
+}
+
+@keyframes translate_background {
+    from{
+        
+        opacity: 0.1;
+    }to{
+        opacity: 1;
+        background-color: rgb(122, 119, 119);
+    }
+}
+
+@keyframes dmark_pressed {
+    from{
+        transform: scale(0.7);
+    }
+    to{
+        transform: scale(1);
+    }
+}
+
+@keyframes fade_in {
+    from{
+        transform: translateY(-2.5rem);
+    }
+    to{
+        transform: translateY(0);
+    }
+}
+
+@keyframes fade_out {
+    from{
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to{
+        opacity: 0;
+        transform: translateY(-4.5rem);
+    }
+}
+
+.disappear-dmark{
+    animation : fade_out 0.6s forwards;
+}
+.appear-dmark{
+    animation : fade_in 0.6s forwards;
+}
+
+.dmark-got-pressed{
+    animation : dmark_pressed 0.7s forwards;
+}
+
+.dmark-task-img:hover{cursor: pointer;}
+.dmark-task-img *:hover{cursor: pointer;}
+.dmark-task-img:hover ~ #dmark-task-word{
+    animation: appear_word 0.6s forwards;
+}
+
+.ymark-div2 .d:hover{
+    cursor: pointer;
+    animation : translate_background 0.8s forwards;
+}
+.ymark-div2 .d *:hover{
+    cursor: pointer;
+}
+
+.ymark-div2 .d label{
+    color : azure;
+    font-size: 12px;
+
+}
+
+.ymark-div3:hover{
+    cursor: pointer;
+    background-color: rgb(122, 119, 119);
+}
+.ymark-div3 *:hover{
+    cursor: pointer;
+}
+
+.ymark-div3{
+    flex : 1;
+    border-radius: 0px 0px 5px 5px;
+    text-align: center;
+    display : flex;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 12px;
+    color : azure;
+    border-top: 1.5px solid rgb(122, 119, 119);
+    font-family: "YouTube Sans";
+
+}
+
+#youbookmark-div{
+    display : flex;
+    height : 100%;
+    width : 100%;
+}
+
+@keyframes fade_out_ymark {
+    from{
+        opacity: 1;
+    }
+    to{
+        opacity: 0;
+    }
+}
+
+.fadeout_ymark{
+    animation : fade_out_ymark 0.6s forwards;
+}
+
+.task-image-ymark{
+    filter: invert(100%);
+    -webkit-filter: invert(100%);
+    width :26px;
+    height : 26px;
+}
+
+
+#youbookmark-div .img-1-ymark{
+    filter: invert(100%);
+    -webkit-filter: invert(100%);
+    width : 20px;
+    height : 20px;
+    margin : auto;
+}
+
+.ymark-menu-bookmark{
+    opacity: 1;
+    height : 100%;
+    width : 100%;
+    z-index: 100;
+    position: absolute;
+    background-color: #252825ad;
+    display : flex;
+    justify-content: center;
+    transition : opacity 1s;
+}
+
+.ymark-menu-bookmark .dmark-root-div,.add-mark-div{
+    background-color: #606060;
+    margin : auto;
+    width: 250px;
+    height: 150px;
+    border-radius: 5px 5px 5px 5px;
+
+}
+
+.add-mark-div > div:nth-child(1) label{
+    color : azure;
+    font-family: HeaderFont;
+    margin: auto;
+    font-size: 14px;
+    color : rgb(240, 255, 255);
+    text-overflow: ellipsis;
+    width: 90%;
+    overflow: hidden;
+    user-select: none;
+}
+.add-mark-div > div:nth-child(1){
+    border-radius : 5px 5px 0px 0px;
+    background-color: #4b4b4b;
+    display: flex;
+    justify-content: center;
+    height : 40px;
+    
+    white-space: nowrap;
+    overflow: hidden;
+    
+}
+.add-mark-div > div:nth-child(2){
+    flex : 1;
+    flex-grow: 4;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.add-mark-div > div:nth-child(2) textarea{
+    border : none;
+    resize: none;
+    background-color: rgb(77, 76, 76);
+    width: 85%;
+    color : azure;
+    height: 90%;
+    line-height: 24px;
+    padding : 10px;
+    margin : auto;
+    z-index: 1000;
+    font-size: 14px;
+    border-radius: 5px 5px 5px 5px;
+    overflow: auto;
+}
+
+
+#timeline{
+    margin-top: 20px;
+}
+#timeline label{
+    visibility: hidden;
+}
+
+.add-mark-div > div:nth-child(2) label:nth-child(1){
+    width: auto;
+    text-align: center;
+    background-color: rgb(77, 76, 76);
+    font-size: 11px;
+    color : azure;
+    padding :5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-family: MainFont;
+    margin-left : 23.750px;
+    user-select: none;
+    border-radius: 5px 5px 0px 0;
+    
+}
+.add-mark-div > div:nth-child(2) textarea::selection{
+    color : azure;
+    background-color: #20c997;;
+}
+.add-mark-div > div:nth-child(2) textarea:focus{
+    outline : none;
+}
+
+
+
+.add-mark-div > div:nth-child(2) label:nth-child(3){
+    font-size : 12px;
+    color : rgba(240, 255, 255, 0.628);
+    font-family: MainFont;
+    margin: auto;
+    margin-top: 10px;
+    user-select: none;
+}
+
+.add-mark-div > div:nth-child(3){
+    display : flex;
+    margin-top: 10px;
+    height : 30px;
+}
+
+.add-mark-div > div:nth-child(3) button{
+    width: 100%;
+    border : none;
+    color : rgb(240, 255, 255);
+    background-color: #4b4b4b;
+    font-size: 12px;
+    height : 30px;
+}
+
+.add-mark-div > div:nth-child(3) #cancel{
+    border-radius: 0px 0px 0px 5px;
+}
+
+@keyframes scale_a_little {
+    from{
+        opacity: 0;
+    }to{
+        opacity: 1;
+    }
+}
+
+.add-mark-div > div:nth-child(3) #cancel:hover{
+    background-color: #e33d4d;
+    cursor: pointer;
+    color :white;
+    animation : scale_a_little 0.6s forwards;
+}
+
+.add-mark-div > div:nth-child(3) #save:hover{
+    background-color: #20c997;
+    cursor: pointer;
+    color :white;
+    animation : scale_a_little 0.6s forwards;
+}
+
+.add-mark-div > div:nth-child(3) #save{
+    border-radius: 0px 0px 5px 0px;
+    border-left: 2px solid rgba(0, 0, 0, 0.057);
+}
+
+.add-mark-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    animation: make_div_bigger 0.7s forwards;
+    border-radius: 5px 5px 5px 5px;
+    border : 2px solid rgba(240, 255, 255, 0.253);
+}
+
+
+
+
+
+@keyframes make_div_bigger {
+    from{
+        width: 250px;
+        height: 150px;
+    }to{
+        width: 450px;
+        height: 350px;
+    }
+}
+

@@ -1,0 +1,136 @@
+
+.youtube-videos, .clicked{
+    display : grid;
+    grid-template-areas: 
+        'thumbnail title'
+        'thumbnail link'
+        'thumbnail bookmark-count'
+    ;
+    gap : 10px;
+    grid-template-columns: auto 3fr;
+    grid-template-rows: 16px auto auto;
+    padding : 13px;
+
+}
+
+.youtube-videos img, .clicked img{
+    width : 100px;
+    height : 70px;
+    border-radius: 5px 5px 5px 5px;
+    border : 2px solid black;
+    margin : auto;
+    grid-area : thumbnail;
+}
+
+#content{
+    height : 79%;
+    overflow: auto;
+    background-color: rgb(228, 231, 231);
+    overflow-x: hidden;
+}
+.youtube-videos #title, .clicked #title{
+    grid-area: title;
+    font-size: 16px;
+    font-weight: bold;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.youtube-videos #link, .clicked #link{
+    grid-area: link;
+    font-style: italic;
+    font-size: 12px;
+    color :rgb(82, 87, 85)
+}
+
+.youtube-videos #bcount, .clicked #bcount{
+    grid-area: bookmark-count;
+
+}
+
+.vid-hover:hover{
+    animation : hovervideotrack 0.5s forwards;
+    cursor: pointer;
+}
+.youtube-videos *:hover{
+    cursor: pointer;
+}
+
+
+
+.vidmark-anime label{
+    animation: initial_load 0.6s forwards;
+}
+.vidmark-anime  img{
+    animation: image_load 0.8s forwards;
+}
+.vidmark-anime #link{
+    animation : link_load 0.8s forwards;
+}
+
+
+.clicked img{
+    border : 2px solid azure;
+}
+.clicked{
+    background-color: #fcbf53;
+}
+.clicked #title{
+    color : rgb(103, 112, 112);
+}
+.clicked #link{
+    color : rgb(95, 103, 103);
+}
+.clicked #bcount{
+    color : rgb(103, 112, 112);
+}
+
+@keyframes shrink_after_click {
+    0%{
+        transform: scale(0.98);
+    }
+    100%{
+        transform : scale(1);
+    }
+}
+
+.shrink{
+    animation : shrink_after_click 0.5s forwards;
+}
+
+
+@keyframes hovervideotrack {
+    from{}to{
+        background-color: rgb(189, 189, 189);
+     
+    }
+}
+
+@keyframes initial_load {
+    from{
+        transform: translateX(-1.1rem);
+    }
+    to{
+        transform: translateX(0);;
+    }
+}
+@keyframes image_load {
+    from{
+        transform: translateY(12px);
+        opacity: 0.1;
+    }
+    to{
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+@keyframes link_load {
+    from{
+        
+        opacity: 0.1;
+    }
+    to{
+        opacity: 1;
+    }
+}

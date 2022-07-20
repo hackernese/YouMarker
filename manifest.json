@@ -1,0 +1,47 @@
+{
+
+    "name" : "Youtube bookmarks",
+    "description":"Bookmarking youtube timestamp",
+    "version":"0.1.0",
+    "host_permissions" : ["https://*.youtube.com/*"],
+    "permissions":["storage", "tabs"] ,
+
+    "content_scripts":[
+        {
+            "matches":["https://*.youtube.com/watch?v=*"],
+            "js":[
+                "assets/jquery.js",
+                "keystrokes.js",
+                "main.js"
+            ],
+            "css":[
+                "assets/css/youtube-btn.css"
+            ]
+        }
+    ],
+
+    "web_accessible_resources":[
+        {
+            "resources":[
+                "assets/style.css",
+                "assets/fonts/*",
+                "assets/*"
+            ],
+            "matches":["https://*.youtube.com/*"]
+        }
+    ],
+
+    "icons":{"128":"assets/img/icon_128px.ico"},
+
+    "action":{
+        "default_icon":{
+            "16": "assets/img/icon_128px.ico",
+            "24": "assets/img/icon.ico"
+        },
+        "default_title": "Youtube bookmarker",
+        "default_popup": "popup.html"
+    },
+
+    "manifest_version":3
+
+}

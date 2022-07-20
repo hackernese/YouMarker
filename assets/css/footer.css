@@ -1,0 +1,144 @@
+
+#footer{
+    background-color: rgb(61, 60, 60);
+    height : 9%;
+}
+
+
+#footer{
+    color : azure;
+    display : flex;
+    flex-direction: row;
+    justify-content:space-between;
+}
+#previous, #next{
+    font-size: 35px;
+    color : azure;
+    border-left:2px solid rgba(128, 128, 128, 0.267);
+    border-right: 2px solid rgba(128, 128, 128, 0.267);
+    width : 40px;
+    text-align: center;
+    align-items: center;
+    align-content: center;
+}
+
+@keyframes initial_pagebtn {
+    to{
+        transform : translateX(0);
+    }
+}
+@keyframes hoverbtn {
+    to{
+        
+        background-color: rgba(107, 105, 105, 0.808);
+        color : azure;
+    }
+}
+
+.nextanime{
+    animation : initial_pagebtn 0.5s forwards;  
+}
+
+.prevanime{
+    animation : initial_pagebtn 0.5s forwards;
+}
+
+
+#previous{
+    transform: translateX(-1.1rem);
+}
+#next{
+    transform: translateX(1.1rem);
+}
+
+#previous:hover, #next:hover{
+    transform : translateX(0);
+    animation : hoverbtn 0.3s forwards;
+    cursor: pointer;
+}
+
+#inner-actions{
+    display : flex;
+    flex-direction: column;
+    justify-content: center;
+    width : 50%;
+}
+
+
+#actions-btns{
+    height : auto;
+    display : none;
+    justify-content: center;
+}
+
+#page-num{
+    text-align: center;
+
+    user-select: none;
+}
+#page-num label{
+    font-size: 15px;
+}
+
+
+@keyframes load_utilities {
+    from{
+        opacity: 0.1;
+        transform: translateY(-0.6rem);
+    }to{
+        opacity: 1;
+        transform: translate(0);
+        
+    }
+}
+
+@keyframes load_page_animate {
+    from{
+        opacity: 0.1;
+        transform: translateY(1rem);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tasks-bar img{
+    animation : load_utilities 0.6s forwards;
+}
+
+.page-anime{
+    animation : load_page_animate 0.6s forwards;
+}
+
+@keyframes hover_action_buttons {
+    
+    from{}to{
+        transform: scale(1.1);
+    }
+
+}
+
+#actions-btns img{
+    height : 20px;
+    width : 20px; 
+    
+    filter: invert(100%);
+    -webkit-filter: invert(100%);
+
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 15%;
+    padding : 5px;
+
+}
+
+#actions-btns img:hover{
+    filter: invert(0%);
+    -webkit-filter: invert(0%);
+    background-color: white;
+    cursor: pointer;
+
+    animation : hover_action_buttons 0.5s forwards;
+
+}

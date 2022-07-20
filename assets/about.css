@@ -1,0 +1,27 @@
+@import "css/fonts.css";
+@import "css/header.css";
+
+*{
+    margin : 0;
+    padding : 0;
+}
+
+body, html{
+    font-family: MainFont;
+    min-height: 580px;
+    min-width: 600px;
+    background-color: whitesmoke;
+    height : 100%;
+}
+
+
+#content{
+    height : 79%;
+}
+
+
+.header #icon{
+    animation : none;
+    width : 78px;
+    height: 89px;
+}
