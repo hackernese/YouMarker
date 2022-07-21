@@ -1,3 +1,5 @@
+const query_title = "yt-formatted-string.ytd-video-primary-info-renderer";
+
 var $j = jQuery.noConflict();
 var tester;
 var youtubebar;
@@ -5,6 +7,10 @@ var video_container;
 var is_played=true;
 
 const loadIcon = async ()=>{
+
+    if($j("#youbookmark-div")[0])
+        return; // the button has already been added
+
     let butn = document.createElement("div");
 
     butn.classList.add("ytp-button");
@@ -102,7 +108,7 @@ const popup_menu = async ()=>{
         `
         <div class="add-mark-div">
             <div>
-                <label>${$j('meta[name="title"]')[0].content}</label>
+                <label>${document.querySelectorAll(query_title)[1].innerHTML}</label>
             </div>
             <div> 
                 <div id="timeline">
@@ -153,7 +159,11 @@ const popup_menu = async ()=>{
 
             $j(".confirm-tasks-btn #save").bind("click", (e)=>{
                 
-
+                chrome.storage.sync.set(
+                    {
+                        
+                    }
+                )
                 console.log(getTime($j(".video-stream")[0].currentTime));
 
             });
@@ -182,12 +192,7 @@ const popup_menu = async ()=>{
 }
 
 
-$j(".ytp-right-controls").ready(function() {
-    
-    youtubebar = $j(".ytp-right-controls");
-    loadIcon();
 
-});
 
 
 $j(".html5-video-player").ready(function(){video_container = $j(".html5-video-player");});
@@ -201,8 +206,7 @@ $j("video").ready(function(){
     });
 });
 
-(()=>{
-
+const load_fonts = async ()=>{
     $j("head").append(`
 
     <style>
@@ -221,6 +225,38 @@ $j("video").ready(function(){
     </style>
     
     `);
+}
+
+$j(".ytp-right-controls").ready(function() {
+
+    youtubebar = $j(".ytp-right-controls");
+    loadIcon();
+    
+});
+
+(()=>{
+
+    load_fonts();
+    
+
+    chrome.runtime.onMessage.addListener((obj, sender, resp)=>{
+ 
+        const {type, id, url} = obj;
+
+        if(type==="newvid"){
+            
+            // Loading the extension button into the video bar
+
+            $j(".ytp-right-controls").ready(function() {
+
+                youtubebar = $j(".ytp-right-controls");
+                loadIcon();
+                
+            });
+
+        }
+
+    });
 
 })();
 
