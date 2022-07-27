@@ -39,6 +39,29 @@ function reset_bookmark(e){
     selected_mark = index = undefined;
 }
 
+$("#about").on("click", ()=>{
+    $("#about").addClass("back-btn");
+    $("#about").removeClass("about-hover");
+})
+
+
+$(".youtube-videos").dblclick((e)=>{
+    $(".header").addClass("fade_out_header");
+    $(".header div").addClass("fade_out_header");
+    $(".header label").addClass("fade_out_header");
+    $(".header #icon").addClass("fade_out_header");
+
+    $("#content").addClass("fade_out_middle");
+    $("#footer").addClass("fade_out_footer");
+
+    e.currentTarget.classList.add("fade_item_out");
+
+    setTimeout(()=>{
+        window.location.href = `/bookmark.html`; //?id=${e.currentTarget.id}`;
+    }, 400);
+    
+})
+
 $(document).ready(()=>{
 
     $("#content").sortable();
@@ -110,35 +133,37 @@ $(document).ready(()=>{
         }
 
     });
-});
+
+    
+    extract_all_videos((ret)=>{
 
 
-$("#about").on("click", ()=>{
-    $("#about").addClass("back-btn");
-    $("#about").removeClass("about-hover");
-})
+        if(ret.key===undefined){
+            
+            $("#content").append(`
+            <div class="empty">
+                <img src="assets/img/empty.png" title="Empty results.">
+                <label>No video found.</label>
+            </div>
+            `);
 
-$(".back-btn").on("click", ()=>{
-    console.log("ASD");
-});
+        }else{
 
-$(".youtube-videos").dblclick(()=>{
-    alert("ASD");
-})
+            // ret.forEach((e, index, arr)=>{
+            //     `
+            //     <div class="youtube-videos vidmark-anime vid-hover" id="mark4">
+            //         <img src="assets/img/test.png">
+            //         <label id="title">7!! - Orange [Shigatsu wa Kimi no Uso ED 2] Lyrics</label>
+            //         <a id="link">https://www.youtube.com/watch?v=JdSpuTi9d8A</a>
+            //         <label id="bcount">Bookmarks : </label>
+            //     </div>
+            //     `;
 
-$(".youtube-videos").bind("click", (e)=>{
-    $(".header").addClass("fade_out_header");
-    $(".header div").addClass("fade_out_header");
-    $(".header label").addClass("fade_out_header");
-    $(".header #icon").addClass("fade_out_header");
+            // });
 
-    $("#content").addClass("fade_out_middle");
-    $("#footer").addClass("fade_out_footer");
+        }
+        
+    });
 
-    e.currentTarget.classList.add("fade_item_out");
-
-    setTimeout(()=>{
-        window.location.href = `/bookmark.html?id=${e.currentTarget.id}`;
-    }, 500);
-
+    
 });

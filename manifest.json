@@ -12,7 +12,7 @@
             "js":[
                 "assets/jquery.js",
                 "keystrokes.js",
-                "main.js"
+                "ContentScript.js"
             ],
             "css":[
                 "assets/css/youtube-btn.css"

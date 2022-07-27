@@ -1,10 +1,20 @@
 
 
-var a, b;
-
 $(".bookmark").bind({
 
+    // Class definitions :
+
+    /*
+
+        + show_timeline : SHowing the section which shows the timestamp that the user saves back 
+        + hide_timeline : Undo the above tasks ^
+        + unload_tasks : Loading and unloading all of the features available on a bookmark ( delete + browse )
+
+    */
+
     mouseenter : function(e){
+
+        // WHen a user move their mouse over a certain bookmark.
 
         let t = e.currentTarget;
         let timeline = t.children[0];
@@ -12,6 +22,7 @@ $(".bookmark").bind({
 
         timeline.classList.add("hide_timeline");
         timeline.classList.remove("show_timeline");
+        // Showing timeline when a hover action is made
 
         tasks.style.display = "flex";
         
@@ -20,30 +31,37 @@ $(".bookmark").bind({
 
     mouseleave : function(e){
 
+        // When their moouse leaves a bookmark after hovering over it.
+
         let t = e.currentTarget;
         let timeline = t.children[0];
         let tasks = t.children[2];
 
         timeline.classList.remove("hide_timeline");
         timeline.classList.add("show_timeline");
+        // Showing timeline when a hover action is made
 
         tasks.classList.add("unload-tasks");
+        tasks.classList.remove("unload-tasks");
+        // Showing the tasks which the user can interact with the bookmark and also hiding it
+        // available tasks such as : "delete" and "browse"
 
-        setTimeout(()=>{
+        tasks.style.display = "none";
 
-            tasks.classList.remove("unload-tasks");
-
-            tasks.style.display = "none";
-
-        }, 400);
         
     },
 
-    click : function(e){
+    dblclick : function(e){
 
+        // Browse to the video's timestamp
+
+        $(".tasks > div > img:nth-child(1)").click();
+    
     }
 
 });
+
+
 
 $(".outer-bookmark").ready(()=>{
 
@@ -55,6 +73,8 @@ $(".outer-bookmark").ready(()=>{
 
 
 const openlink = ()=>{
+
+    // shortcut for opening the link associating with a certain bookmark.
 
     let url = $("#youtube-link")[0].innerHTML;
     window.open(url, "_blank");
@@ -94,8 +114,6 @@ $(".tasks").ready(()=>{
         let t = headline.split(":");
         let second = 0;
 
-        a = t;
-
         while(t.length!=3){
             // Fully qualifed HH:MM:SS
             t.unshift("00");
@@ -119,8 +137,6 @@ $(".tasks").ready(()=>{
 
         let bookmark = $(e.currentTarget.parentNode.parentNode.parentNode);
         let outerbookmark = $(bookmark.parents()[0]);
-
-        a = outerbookmark
 
         bookmark.css("display", "none");
 
@@ -147,7 +163,51 @@ $(".tasks").ready(()=>{
     });
 
     $(".tasks > div > img:nth-child(3)").bind("click", (e)=>{
-        // Editting the reminder
+
+    
+        // When user clicks on a boomark
+
+        const textbox = `
+        <div class="expanded-mark">
+            <textarea>asdsadsadsad</textarea>
+            <button>Save</button>
+        </div>
+        `;
+        const current_div = e.currentTarget.parentElement.parentElement.parentElement.parentElement;
+        const Jcurrent_div = $(current_div);
+
+
+        current_div.classList.add("expand-bookmark");
+        // expand-bookmark = provide the animation to expand the current bookmark
+        // into another interface for the user to manage their own notes.
+
+        Jcurrent_div.children().last().css("visibility", "hidden");
+        // Making the current child element inside the bookmark hidden to make room 
+        // for the later element to appear on top of everything.
+
+        Jcurrent_div.append(textbox);
+        // Adding the textbox HTML data in order to create a textarea for the user
+        // to view the notes and also provide them with features to manage/edit
+        // their own notes.
+
+        $("#content").css("overflow", "hidden");
+
+        $(".expanded-mark > button").bind("click", (e)=>{
+
+            $("#content").css("overflow", "auto");
+
+            Jcurrent_div.children().last().remove();
+            // Removing the textbox out of the current <div>
+
+            Jcurrent_div.children().last().css("visibility", "visible");
+            // Making the previous data inside the current <div> visible again
+
+            current_div.classList.remove("expand-bookmark");
+            // Getting rid of the expand-bookmark class to make the <div> normal
+            // again
+
+        });
+
     });
 
 })

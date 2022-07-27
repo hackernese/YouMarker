@@ -4,83 +4,47 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/css/youtube-btn.css" />
-    <script src="assets/jquery.js"></script>
     <title>Document</title>
 </head>
 <body>
-    
-    <div class="ymark-menu-bookmark">
-        <div class="add-mark-div">
-            <div>
-                <label>Lukas Graham - 7 Yearsasdsadsdsdsadsadsadsdasdsadsadsad [Official Music Video]</label>
-            </div>
-            <div> 
-                <div id="timeline">
-                    <label>3:05 / 7:56</label>
-                </div>
-                <textarea id='reminder-template' placeholder="Reminder..."></textarea>
-                <label id="y-save-text">Ctrl - Enter to save.</label>
-            </div>
-            
-            <div>
-                <button id="cancel">Back</button>
-                <button id="save">Save</button>
-            </div>
-        </div>
+
+
+    <div id="root">
+
+        <label>Cool text</label>
+
     </div>
+
     <style>
 
-        @font-face {
-            font-family: MainFont;
-            src: url(assets/fonts/Oxygen-Regular.ttf);
+        *{
+            margin : 0;
+            padding : 0;
         }
-        @font-face {
-            font-family: HeaderFont;
-            src: url(assets/fonts/Quicksand_Bold.otf);
+        
+        html, body{
+            height: 100%;
         }
+
+        #root{
+            background-color: gray;
+            height : 100%;
+            display : flex;
+            justify-content: center;
+        }
+
+        #root label:nth-child(1){
+
+            color : white;
+            margin : auto;
+            border: 2px solid red;
+            padding : 20px;
+
+        }
+
+
 
     </style>
-
-
-    <script>
-
-        var $j = jQuery.noConflict();
-
-        $j("#reminder-template").bind("focus", (e)=>{
-
-            $j("#timeline").removeClass("timeline_jumpdown");
-            $j("#timeline").addClass("timeline_jumpup");
-            $j("#timeline label").css("visibility", "visible");
-            $j("#timeline label").addClass("appear_timeline");
-
-
-        });
-
-        $j("#reminder-template").bind("blur", (e)=>{
-
-            $j("#timeline").removeClass("timeline_jumpup");
-            $j("#timeline").addClass("timeline_jumpdown");
-            setTimeout(()=>{
-                $j("#timeline label").css("visibility", "hidden");
-                $j("#timeline label").removeClass("appear_timeline");
-            }, 300);
-                        
-
-            
-        });
-
-        $j("#reminder-template").keydown((e)=>{
-
-            if (e.ctrlKey && e.keyCode == 13) {
-                alert("You click some shits");
-            };
-
-        });
-
-
-    </script>
-
 
 </body>
 </html>
