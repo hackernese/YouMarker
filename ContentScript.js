@@ -43,11 +43,11 @@ const getTime = t =>{
 
 const TimestampExistAlert = (ctimestamp)=>{
 
-    alert(`Bookmark for timestamp "${ctimestamp}" has already existed.`);
+    notify("error", `Bookmark for timestamp "${ctimestamp}" has already existed.`);
 
 };
 
-function BookmarkFormBind(){
+function BookmarkFormBind(vidid, timestamp, ctimestamp){
 
     // Binding some HTML elements to some events and tweaking some stuffs when a user wish
     // to open the textarea in order to insert notes into the bookmark
@@ -97,7 +97,6 @@ function BookmarkFormBind(){
     });
 
     $j(".confirm-tasks-btn").ready(()=>{
-
         // Waiting for the note-making form to fully appear on-screen.
 
         $j(".confirm-tasks-btn #cancel").bind("click", (e)=>{
@@ -112,11 +111,14 @@ function BookmarkFormBind(){
 
         $j(".confirm-tasks-btn #save").bind("click", (e)=>{
 
+            console.log(ctimestamp);
+
             // SAVE BUTTON                
 
             chrome.storage.sync.get([db], (items)=>{
 
                 let {order, videos} = Object.values(items)[0];
+                let context = $j("#reminder-template").val();
 
                 if(!videos.hasOwnProperty(vidid)){
 
@@ -137,7 +139,7 @@ function BookmarkFormBind(){
                         // To grab Youtube's thumbnail : https://img.youtube.com/vi/< id of the video>/mqdefault.jpg
                         bookmarks : {
                             [ctimestamp] : {
-                                description : ""
+                                description : context
                             }
                         },
                         // List of all of the bookmarks which this extension is going to 
@@ -165,13 +167,21 @@ function BookmarkFormBind(){
 
                     }else{
 
-                        videos[vidid].bookmarks[timestamp] = {description:""};
+                        videos[vidid].bookmarks[ctimestamp] = {description:context};
 
                     }
 
                 }
 
-                chrome.storage.sync.set({[db]:{order:order, videos:videos}});
+                chrome.storage.sync.set({[db]:{order:order, videos:videos}}, ()=>{
+
+                    $j(".confirm-tasks-btn #cancel").click();
+
+                    $j(".ymark-menu-bookmark").remove();
+
+                    notify("ok", `Created bookmark for timestamp "${ctimestamp}".`);
+
+                });
 
             });
 
@@ -270,16 +280,21 @@ const popup_menu = async ()=>{
 
             let {order, videos} = Object.values(items)[0];
 
-            if(videos[vidid]===undefined)return;
+            if(videos[vidid]!==undefined){
+                if(videos[vidid].bookmarks.hasOwnProperty(ctimestamp)){
 
-            if(videos[vidid].bookmarks.hasOwnProperty(ctimestamp)){
+                    $j(".ymark-menu-bookmark").remove();
+                    // Removing the entire bookmark section before popping an alert
 
-                TimestampExistAlert(ctimestamp);
-                return;
-                
+                    TimestampExistAlert(ctimestamp);
+                    // Popping an alert
+                    
+                    return;
+                    
+                }
             }
 
-            BookmarkFormBind();
+            BookmarkFormBind(vidid, timestamp, ctimestamp);
 
         });    
     });
@@ -332,6 +347,45 @@ $j(".ytp-right-controls").ready(function() {
 });
 
 
+function notify(type, msg){
+
+    const img = (
+        type=="error" ? 
+        chrome.runtime.getURL('assets/img/fail.png') : 
+        chrome.runtime.getURL('assets/img/ok.png')
+    );
+
+    const html_ = `
+    <div class="notify-ymt">
+
+        <div class="${type=='error' ? 'errorbox' : 'successbox'}">
+    
+            <img src="${img}" />
+            <label id="title"></label>
+            <p id="message">${msg}</p>
+            <div id="loader"></div>
+    
+        </div>
+        
+    </div>
+    `;
+
+    $j("html").append(html_);
+
+    setTimeout(() => {
+
+        $j(".notify-ymt > div").addClass("loadoff");
+
+        setTimeout(() => {
+
+            $j(".notify-ymt").remove() 
+
+        }, 700);
+
+    }, 7000);
+
+}
+
 (()=>{
 
     load_fonts();
@@ -367,14 +421,7 @@ $j(".ytp-right-controls").ready(function() {
 
     });
 
-    chrome.storage.sync.get([db], (e)=>{
-
-        console.log(e);
-
-    });
-
-    // chrome.storage.sync.clear();
-
+    
 
 
 })();

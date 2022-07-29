@@ -15,7 +15,8 @@
                 "ContentScript.js"
             ],
             "css":[
-                "assets/css/youtube-btn.css"
+                "assets/css/youtube-btn.css",
+                "assets/css/notification.css"
             ]
         }
     ],

@@ -1,0 +1,112 @@
+.notify-ymt{
+    position: fixed;
+    z-index: 1;
+    bottom : 7%;
+    height : 100px;
+    width : 100%;
+}
+
+@keyframes popup {
+    from{
+        opacity: 0;
+        transform: translateY(-42px);
+    }to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.errorbox, .successbox{
+    display : grid; 
+    grid-template-areas: 
+        'image titlebar'
+        'image message_'
+        'load load'
+    ;
+    width: 300px;
+    border-radius: 5px 5px 5px 5px;
+    height : auto;
+    margin : auto;
+    font-family: MainFont;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 2fr 2px;
+    color : azure;
+    overflow : hidden;
+    animation : popup 0.7s forwards;
+}
+
+.errorbox{
+    background-color: tomato;
+}
+
+.successbox{
+    background-color: #42ba9c;
+}
+
+.errorbox #title::after{
+    content : "Operation failed.";
+}
+.successbox #title::after{
+    content : "Operation success.";
+}
+
+.notify-ymt #title{
+    grid-area: titlebar;
+    font-size: 18px;
+    height : auto;
+    padding-bottom: 7px;
+    padding-top : 12px;
+    border-bottom: 2px solid rgba(240, 255, 255, 0.489);
+    width : 90%;
+}
+.notify-ymt p{
+    grid-area: message_;
+    padding-top: 10px;
+    padding-right: 8px;
+    padding-bottom: 10px;
+    font-size: 14px;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+.notify-ymt img{
+    grid-area: image;
+    height : 50px;
+    width : 50px;
+    -webkit-filter: invert(100%);
+    filter : invert(100%);
+    margin : auto;
+    margin-top: 17px;
+    margin-right: 13px;
+    margin-left: 14px;
+}
+
+@keyframes reduceit {
+    from{
+        width: 100%;
+    }to{
+        width: 0%;
+    }
+}
+
+.notify-ymt #loader{
+    outline : 2px solid rgba(240, 255, 255, 0.601);
+    background-color: rgba(240, 255, 255, 0.601);
+    width: 100%;
+    grid-area: load;
+    animation : reduceit 7s forwards;
+
+}
+
+@keyframes loadoff_animation {
+    from{
+        opacity: 1;
+        transform: 0;
+    }to{
+        opacity: 0;
+        transform: translateY(-5rem);
+    }
+}
+
+.loadoff{
+    animation : loadoff_animation 0.7s forwards;
+}

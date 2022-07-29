@@ -34,7 +34,7 @@
 
 @keyframes fade_item {
     from{
-    
+        transform: translateX(0);
     }to{
         transform: translateX(-11.1rem);
 
@@ -50,6 +50,6 @@
 .fade_out_middle{
     animation : fade_bookmarks 1s forwards;
 }
-.fade_item_out{
+.fade_item_out__{
     animation : fade_item 0.6s forwards;
 }

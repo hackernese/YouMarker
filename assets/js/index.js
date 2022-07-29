@@ -1,9 +1,9 @@
 const bookmarks = document.getElementsByClassName("youtube-videos");
 const pagenum = document.getElementById("page-num");
 const actions = document.getElementById("actions-btns");
+const db = "video-list";
 var selected_mark, test, dragging;
-
-
+ 
 setTimeout(()=>{
 
     // Removing some initial classes for both the <div> 
@@ -44,28 +44,26 @@ $("#about").on("click", ()=>{
     $("#about").removeClass("about-hover");
 })
 
+function reset_videodbclick(){
+    $(".youtube-videos").dblclick((e)=>{
 
-$(".youtube-videos").dblclick((e)=>{
-    $(".header").addClass("fade_out_header");
-    $(".header div").addClass("fade_out_header");
-    $(".header label").addClass("fade_out_header");
-    $(".header #icon").addClass("fade_out_header");
+        e.currentTarget.classList.add("fade_item_out__");
+        
+        $(".header").addClass("fade_out_header");
+        $(".header div").addClass("fade_out_header");
+        $(".header label").addClass("fade_out_header");
+        $(".header #icon").addClass("fade_out_header");
+        $("#content").addClass("fade_out_middle");
+        $("#footer").addClass("fade_out_footer");
 
-    $("#content").addClass("fade_out_middle");
-    $("#footer").addClass("fade_out_footer");
+        e.currentTarget.addEventListener("animationend", ()=>{
+            window.location.href = `/bookmark.html?id=${e.currentTarget.id}`;
+        });
 
-    e.currentTarget.classList.add("fade_item_out");
+    })
+}
 
-    setTimeout(()=>{
-        window.location.href = `/bookmark.html`; //?id=${e.currentTarget.id}`;
-    }, 400);
-    
-})
-
-$(document).ready(()=>{
-
-    $("#content").sortable();
-
+function reset_videoclick(){
     $(".youtube-videos").bind("click", (event)=>{
 
         let last_child, now_child, index;
@@ -116,6 +114,59 @@ $(document).ready(()=>{
         }
 
     });
+}
+
+function reset_videofull(){
+
+    reset_videodbclick();
+    reset_videoclick();
+
+}
+
+$(document).ready(()=>{
+
+    $("#content").sortable({
+
+        start : (e,ui)=>{
+
+            ui.item.data("previous_pos", ui.item.index());
+            // Setting the previous position before proceeding any further.
+
+        },
+
+        update : (e,ui)=>{
+        
+            // WHen the video was dragged to a new position
+            // Change the storage here 
+            const prev_pos = ui.item.data("previous_pos");
+            const current_pos = ui.item.index();
+            // The newly updated position of this current video item
+
+            chrome.storage.sync.get([db], (e)=>{
+
+                let temp = Object.values(e)[0];
+                let temp_order = temp.order;
+                // Temporary variable for the "order" attribute inside the 
+                // chrome.storage.sync API
+
+                let temp_id = temp_order[prev_pos];
+                // Popping the current video's ID out of the storage's "order"
+                // array and storing it inside a temporary variable first.
+
+                temp_order.splice(prev_pos, 1);
+                // Removing the value out after extracting its value.
+                
+                temp_order.splice(current_pos, 0, temp_id);
+                // Inserting it into a new index, in this case it's 
+                // "current_pos"
+
+                chrome.storage.sync.set({[db]: temp});
+
+            });
+
+        }
+
+    });
 
     $("#content").on("click", (event)=>{
 
@@ -134,11 +185,10 @@ $(document).ready(()=>{
 
     });
 
-    
+
     extract_all_videos((ret)=>{
-
-
-        if(ret.key===undefined){
+        
+        if(ret===undefined || ret.order.length==0){
             
             $("#content").append(`
             <div class="empty">
@@ -149,21 +199,28 @@ $(document).ready(()=>{
 
         }else{
 
-            // ret.forEach((e, index, arr)=>{
-            //     `
-            //     <div class="youtube-videos vidmark-anime vid-hover" id="mark4">
-            //         <img src="assets/img/test.png">
-            //         <label id="title">7!! - Orange [Shigatsu wa Kimi no Uso ED 2] Lyrics</label>
-            //         <a id="link">https://www.youtube.com/watch?v=JdSpuTi9d8A</a>
-            //         <label id="bcount">Bookmarks : </label>
-            //     </div>
-            //     `;
+            ret.order.forEach((e, index, arr) => {
+                
+                let vid = ret.videos[e];
 
-            // });
+                $("#content").append(`
+                <div class="youtube-videos vidmark-anime vid-hover" id="${e}">
+                    <img src="${vid[["img"]]}">
+                    <label id="title">${vid[["title"]]}</label>
+                    <a id="link">${vid[["url"]]}</a>
+                    <label id="bcount">Bookmarks : ${ Object.keys(vid[["bookmarks"]]).length }</label>
+                </div>
+                `);
+
+            });
+
+            reset_videofull();
 
         }
         
     });
 
+
+    // chrome.storage.sync.clear();
     
 });
