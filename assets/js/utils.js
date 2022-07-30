@@ -29,6 +29,36 @@ function get_video_info(id, f){
 
 }
 
+function DeleteVideoById(id_){
+
+    // Delete a video record out of the storage
+
+    chrome.storage.sync.get(["video-list"], (e)=>{
+
+        let data = Object.values(e)[0];
+
+        data.order.splice(data.order.indexOf(id_), 1);
+        
+        delete data.videos[id_];
+
+        chrome.storage.sync.set({["video-list"]:data});
+
+    });
+
+}
+
+function GetVideosOnPage(p, f){
+
+    chrome.storage.sync.get(["video-list"], (e)=>{
+
+        let temp = Object.values(e)[0].order;
+        
+        f(temp.splice( (p-1)*10, p*10 ));
+
+    });
+
+}
+
 function cleanTimeStamp(timestamp){
 
     let temp = timestamp.split(":");

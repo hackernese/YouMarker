@@ -47,6 +47,7 @@
 #previous{
     transform: translateX(-1.1rem);
 }
+
 #next{
     transform: translateX(1.1rem);
 }
@@ -56,6 +57,8 @@
     animation : hoverbtn 0.3s forwards;
     cursor: pointer;
 }
+
+
 
 #inner-actions{
     display : flex;
@@ -141,4 +144,31 @@
 
     animation : hover_action_buttons 0.5s forwards;
 
+}
+
+.disabled{
+
+    opacity: 0.5;
+    background-color: rgba(107, 105, 105, 0.415);
+
+}
+
+.disabled:hover{
+    transform : translateX(0);
+    animation : none;
+    cursor: none;
+}
+
+@keyframes deleted_animation {
+    from{
+        transform: translateX(0);
+        opacity: 1;
+    }to{
+        transform: translateX(100px);;
+        opacity: 0;
+    }
+}
+
+.deleted{
+    animation : deleted_animation 0.7s forwards;
 }

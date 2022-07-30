@@ -130,7 +130,7 @@ function BookmarkFormBind(vidid, timestamp, ctimestamp){
                         // Title of the youtube video
                         fulltime : $j(".video-stream")[0].duration,
                         // The total time of the video
-                        url : window.location.href,
+                        url : `https://youtube.com/watch?v=${vidid}`,
                         // The current youtube video URL
                         id : vidid,
                         // The current unique video identifier 

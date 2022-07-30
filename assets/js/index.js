@@ -4,18 +4,7 @@ const actions = document.getElementById("actions-btns");
 const db = "video-list";
 var selected_mark, test, dragging;
  
-setTimeout(()=>{
 
-    // Removing some initial classes for both the <div> 
-    // id=next and <div> with id=previous
-
-    $("#next").removeClass("nextanime");
-    $("#next").css("transform", "translateX(0)");
-
-    $("#previous").removeClass("prevanime");
-    $("#previous").css("transform", "translateX(0)");
-
-}, 500);
 
 setTimeout(()=>{
 
@@ -27,16 +16,40 @@ setTimeout(()=>{
 
 }, 1000);
 
-function reset_bookmark(e){
-    e.currentTarget.classList.remove("clicked");
-    e.currentTarget.classList.add("youtube-videos");
-    e.currentTarget.classList.add("vid-hover");
-    e.currentTarget.classList.remove("shrink");
+
+function reset_bookmark_pureHTML(e){
+    e.classList.remove("vidclicked");
+    e.classList.remove("clicked");
+    e.classList.add("youtube-videos");
+    e.classList.add("vid-hover");
+    e.classList.remove("shrink");
 
     $("#actions-btns").css("display", "none");
     $("#page-num").css("display", "block");
+}
+function reset_bookmark(e){
 
-    selected_mark = index = undefined;
+    reset_bookmark_pureHTML(e.currentTarget);
+
+}
+
+function set_clicked_bookmark(event){
+    event.currentTarget.classList.remove("youtube-videos");
+    event.currentTarget.classList.remove("vid-hover");
+    event.currentTarget.classList.add("clicked");
+    event.currentTarget.classList.add("shrink");
+    event.currentTarget.classList.add("vidclicked");
+
+    $("#actions-btns").css("display", "flex");
+    $("#page-num").css("display", "none");
+
+    $("#actions-btns").addClass("tasks-bar");
+
+    setTimeout(()=>{
+
+        $("#actions-btns").removeClass("tasks-bar")
+
+    }, 600);
 }
 
 $("#about").on("click", ()=>{
@@ -66,52 +79,35 @@ function reset_videodbclick(){
 function reset_videoclick(){
     $(".youtube-videos").bind("click", (event)=>{
 
-        let last_child, now_child, index;
 
-        if(selected_mark!==undefined){
-            last_child = selected_mark.currentTarget;
-            index = Array.from(last_child.parentNode.children).indexOf(last_child);
-        }
+        let div = event.currentTarget;
 
-        now_child = event.currentTarget;
+        let selected = $(".vidclicked");
 
+        if(selected.length===0){
 
-        if(Array.from(now_child.parentNode.children).indexOf(now_child) == index){
+            // No div has been selected yet.
 
-            // User has already clicked it once, time to unset it
+            set_clicked_bookmark(event);
 
-
-            reset_bookmark(event)
 
         }else{
 
-            // User has never clicked it so it's time to check it
-            if(selected_mark){
+            // One div has been selected. Do something here
 
-                // Unselect the previously selected video 
-                reset_bookmark(selected_mark)
-
+            // First check if the user has reclicked the selected div
+            // if yes then unset it
+            if(div==selected[0]){
+                reset_bookmark(event);
+                return;
             }
 
-            event.currentTarget.classList.remove("youtube-videos");
-            event.currentTarget.classList.remove("vid-hover");
-            event.currentTarget.classList.add("clicked");
-            event.currentTarget.classList.add("shrink");
+            reset_bookmark_pureHTML(selected[0]);
 
-            $("#actions-btns").css("display", "flex");
-            $("#page-num").css("display", "none");
-
-            $("#actions-btns").addClass("tasks-bar");
-
-            setTimeout(()=>{
-
-                $("#actions-btns").removeClass("tasks-bar")
-
-            }, 600);
-
-            selected_mark = event;
+            set_clicked_bookmark(event);
 
         }
+
 
     });
 }
@@ -121,6 +117,79 @@ function reset_videofull(){
     reset_videodbclick();
     reset_videoclick();
 
+}
+
+function nextprevButtonsBindEvent(){
+
+    $("#next").bind("click", (e)=>{
+
+        alert("Cool bean too, click next...");
+
+    });
+    $("#previous").bind("click", (e)=>{
+
+        alert("Cool bean, click previous...");
+
+    });
+
+}
+
+function BindClickEventActionBtn(){
+
+    // Binding click events to action buttons such as "View",
+    // "Delete" and "Notify", etc...
+
+    $("#actions-btns img").bind("click", (e)=>{
+
+        const video = $(".shrink")[0];
+        const videoID = video.id;
+        const action = e.currentTarget.id;
+
+        if(action=='viewbtn'){
+        
+            // Viewing the video on a new tab
+
+            window.open(video.children[2].innerHTML, "blank_");
+        
+        }else if(action=="deletebtn"){
+
+            // Delete this video out of the storage
+            DeleteVideoById(videoID);
+
+            video.classList.add("deleted");
+
+            setTimeout(()=>{
+
+                video.remove();
+                
+                if($("#content").children().length===0)
+                    AddPageEmptyMessage();
+
+            }, 700);
+        
+        }else if(action=="notifybtn"){
+
+            // OPen up the notifying setting in order to put a notification
+            // onto this video 
+        
+            console.log(1);
+        
+        }
+
+
+    });
+}
+
+function AddPageEmptyMessage(){
+
+    // Invoke this when the #content element has no children
+
+    $("#content").append(`
+    <div class="empty">
+        <img src="assets/img/empty.png" title="Empty results.">
+        <label>No video found.</label>
+    </div>
+    `);
 }
 
 $(document).ready(()=>{
@@ -187,40 +256,89 @@ $(document).ready(()=>{
 
 
     extract_all_videos((ret)=>{
-        
+
+        console.log(ret);
+
         if(ret===undefined || ret.order.length==0){
             
-            $("#content").append(`
-            <div class="empty">
-                <img src="assets/img/empty.png" title="Empty results.">
-                <label>No video found.</label>
-            </div>
-            `);
+            AddPageEmptyMessage();
+            $("#totalpage").text(0);
+            $("#currentpage").text(0);
 
         }else{
 
-            ret.order.forEach((e, index, arr) => {
-                
-                let vid = ret.videos[e];
+            let totalpage = Math.ceil(ret.order.length/10);
 
-                $("#content").append(`
-                <div class="youtube-videos vidmark-anime vid-hover" id="${e}">
-                    <img src="${vid[["img"]]}">
-                    <label id="title">${vid[["title"]]}</label>
-                    <a id="link">${vid[["url"]]}</a>
-                    <label id="bcount">Bookmarks : ${ Object.keys(vid[["bookmarks"]]).length }</label>
-                </div>
-                `);
+
+            if(totalpage<=1){
+
+                // If the amount of page is not enough to be paginated, ignore it 
+                // and move on, also disable the next and previous buttons
+
+                $("#next").removeClass("nextanime");
+                $("#previous").removeClass("prevanime");
+
+                $("#next").addClass("disabled");
+                $("#previous").addClass("disabled");
+
+
+                $("#next").css("transform", "translateX(0)");
+                $("#next").css("cursor", "not-allowed");
+                $("#previous").css("transform", "translateX(0)");
+                $("#previous").css("cursor", "not-allowed");
+
+            }else{
+
+                setTimeout(()=>{
+
+                    // Removing some initial classes for both the <div> 
+                    // id=next and <div> with id=previous
+
+                    $("#next").removeClass("nextanime");
+                    $("#next").css("transform", "translateX(0)");
+
+                    $("#previous").removeClass("prevanime");
+                    $("#previous").css("transform", "translateX(0)");
+
+                }, 500);
+
+                nextprevButtonsBindEvent();
+
+            }
+
+            debugger;
+
+            $("#totalpage").text(totalpage);
+            $("#currentpage").text(1);
+
+            GetVideosOnPage(1, (videos)=>{
+
+                videos.forEach((e, index, arr) => {
+
+                    let vid = ret.videos[e];
+
+                    console.log(vid);
+    
+                    $("#content").append(`
+                    <div class="youtube-videos vidmark-anime vid-hover" id="${e}">
+                        <img src="${vid[["img"]]}">
+                        <label id="title">${vid[["title"]]}</label>
+                        <a id="link">${vid[["url"]]}</a>
+                        <label id="bcount">Bookmarks : ${ Object.keys(vid[["bookmarks"]]).length }</label>
+                    </div>
+                    `);
+    
+                });
+    
+                reset_videofull();
 
             });
-
-            reset_videofull();
 
         }
         
     });
 
-
+    BindClickEventActionBtn();
     // chrome.storage.sync.clear();
     
 });
