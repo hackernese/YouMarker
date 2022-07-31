@@ -297,6 +297,20 @@ body, html{
     }
 }
 
+@keyframes bookmark_got_deleted {
+    from{
+        opacity: 1;
+        transform: translateX(0);
+    }to{
+        opacity: 0;
+        transform: translateX(-5.1rem);
+    }
+}
+
+.bmark-got-deleted{
+    animation : bookmark_got_deleted 0.7s forwards;
+}
+
 .unexpand-bookmark{
     animation : unexpand_animation 0.7s forwards;
 }
@@ -519,4 +533,24 @@ body, html{
 .delete img:nth-child(1):hover{
     cursor: pointer;
     background-color: #a233b9;;
+}
+
+.empty{
+    color : rgba(0, 0, 0, 0.498);
+    font-family: MainFont;
+    display : flex;
+    justify-content: center;
+    flex-direction: column;
+    height : 80%;
+    overflow : hidden;
+    align-items: center;
+}
+.empty img{
+    width : 50px;
+    height : 50px;
+    -webkit-filter: invert(59%);
+    filter : invert(59%);
+}
+.empty label{
+    margin-top: 10px;
 }

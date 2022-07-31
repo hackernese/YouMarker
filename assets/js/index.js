@@ -257,8 +257,6 @@ $(document).ready(()=>{
 
     extract_all_videos((ret)=>{
 
-        console.log(ret);
-
         if(ret===undefined || ret.order.length==0){
             
             AddPageEmptyMessage();
@@ -306,8 +304,6 @@ $(document).ready(()=>{
 
             }
 
-            debugger;
-
             $("#totalpage").text(totalpage);
             $("#currentpage").text(1);
 
@@ -316,8 +312,6 @@ $(document).ready(()=>{
                 videos.forEach((e, index, arr) => {
 
                     let vid = ret.videos[e];
-
-                    console.log(vid);
     
                     $("#content").append(`
                     <div class="youtube-videos vidmark-anime vid-hover" id="${e}">

@@ -111,8 +111,6 @@ function BookmarkFormBind(vidid, timestamp, ctimestamp){
 
         $j(".confirm-tasks-btn #save").bind("click", (e)=>{
 
-            console.log(ctimestamp);
-
             // SAVE BUTTON                
 
             chrome.storage.sync.get([db], (items)=>{
@@ -181,6 +179,9 @@ function BookmarkFormBind(vidid, timestamp, ctimestamp){
 
                     notify("ok", `Created bookmark for timestamp "${ctimestamp}".`);
 
+                    if(!is_played)
+                        $j("video")[0].play();
+
                 });
 
             });
@@ -204,8 +205,6 @@ function BookmarkFormBind(vidid, timestamp, ctimestamp){
 }
 
 const popup_menu = async ()=>{
-
-    
 
     let utility_box = document.createElement("div");
 
@@ -411,8 +410,12 @@ function notify(type, msg){
     });
 
 
-
     chrome.storage.sync.get([db], (e)=>{
+
+        // If this is a freshly initialized extension which just had been installed
+        // Initialize it with an empty dataset 
+
+        // Structure : {order:[], videos:[]}
 
         if(Object.entries(e).length === 0)
 

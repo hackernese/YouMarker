@@ -46,6 +46,45 @@ function DeleteVideoById(id_){
     });
 
 }
+ 
+
+function ChangeBookMarkDescription(vidid, mark, content){
+
+    chrome.storage.sync.get(["video-list"], (e)=>{
+
+        let data = Object.values(e)[0];
+        // Grab the god damn video
+        let bookmarks = data.videos[vidid].bookmarks;
+        // The name of the variable already explained itself
+
+        bookmarks[[mark]].description = content;
+
+        chrome.storage.sync.set({["video-list"]:data});
+
+    });
+
+}
+
+function DeleteBookMarkByVideoID(vidid, mark, execute_at_the_end){
+
+    chrome.storage.sync.get(["video-list"], (e)=>{
+
+        let data = Object.values(e)[0];
+        // Grab the god damn video
+        let bookmarks = data.videos[vidid].bookmarks;
+        // The name of the variable already explained itself
+
+        delete bookmarks[[mark]];
+
+        chrome.storage.sync.set({["video-list"]:data} , ()=>{
+
+            execute_at_the_end();
+
+        });
+
+    });
+
+}
 
 function GetVideosOnPage(p, f){
 
