@@ -30,28 +30,6 @@ const open_bookmark_menu = async (e)=>{
 
     $j(document).keydown((e)=>{
 
-        if (e.ctrlKey && e.keyCode == 77) {
-
-            // Detecting Ctrl - M which is a shortcut for 
-            // opening up the popup menu 
-
-            // Press Ctrl - M again to close it
-
-            if($j(".ymark-menu-bookmark")[0]){
-                
-                // Checking if the user has previously opened the 
-                // menu or not
-
-                $j(".ymark-div3").click(); 
-                // If yes then close it
-
-            }else{
-
-                open_main_menu();
-
-            }
-            
-        };
 
         if (e.ctrlKey && e.keyCode == 73) {
 
@@ -65,12 +43,12 @@ const open_bookmark_menu = async (e)=>{
                 // Checking if the user has previously opened the 
                 // menu or not
 
-                $j(".ymark-div3").click(); 
+                $j(".confirm-tasks-btn #cancel").click(); 
                 // If yes then close it
 
             }else{
 
-                open_bookmark_menu();
+                open_main_menu();
 
             }
 

@@ -1,4 +1,11 @@
 
+import { 
+    get_video_info, 
+    getTime,
+    ChangeBookMarkDescription,
+    DeleteBookMarkByVideoID
+} from "./chrome-utils.js";
+
 function AddEmptyPage(){
     $("#content").append(`
     <div class="empty">
@@ -8,14 +15,44 @@ function AddEmptyPage(){
     `);
 }
 
+$("#back > img").ready(()=>{
+
+    // #back > img : Used to return back to the popup page
+
+    $("#back > img").on("click", ()=>{
+
+        window.location.href = "/popup.html";
+        
+    });
+
+});
+
 function bindBookMarkEvents(){
+
+    /*
+
+        When all of the necessary elements are finished putting and loading
+        into th DOM, call this function to bind some handler to them through
+        some specific events such as "click" or remove certain classes to 
+        get rid of redudant animation which has finished.
+
+        CLASSES :
+            -> outer-bookmark : The wrapper classes of .bookmark
+
+            -> bookmark : The section containing the data about a specific bookmark
+
+            -> tasks : Each bookmark will have its own action buttons which allows actions such as :
+                    + Deleting the bookmark
+                    + Updating the content of the boomark
+                    + Browsing the bookmark
+                This class is used to hold all of those action buttons
+
+    */
     
     $(".outer-bookmark").ready(()=>{
-
         setTimeout(()=>{
             $(".outer-bookmark").removeClass("init-bookmark");
         }, 600);
-    
     })
 
     $(".bookmark").bind({
@@ -259,16 +296,6 @@ function bindBookMarkEvents(){
     
     })  
 
-    $("#back > img").ready(()=>{
-
-        $("#back > img").on("click", ()=>{
-
-            window.location.href = "/popup.html";
-            
-        });
-
-    });
-
 }
 
 const openlink = ()=>{
@@ -294,59 +321,55 @@ $("#notification").ready(()=>{
 
 
 
-$(document).ready(()=>{
+let id_ = window.location.href.split("?id=")[1].trim();
 
-    let id_ = window.location.href.split("?id=")[1].trim();
+get_video_info(id_, (e)=>{
 
-    get_video_info(id_, (e)=>{
+    let duration = getTime(e[["fulltime"]]);
 
-        let duration = getTime(e[["fulltime"]]);
+    $("#video-text").text(e[["title"]]);
+    // Title of the youtube video
+    $("#youtube-link").text(e[["url"]]);
+    // Link to the youtube video
+    $("#duration").text(duration);
+    // The duration of the video
+    $("#totalmarks").text(Object.keys(e[["bookmarks"]]).length);
+    // The total number of available bookmarks in this video
 
-        $("#video-text").text(e[["title"]]);
-        // Title of the youtube video
-        $("#youtube-link").text(e[["url"]]);
-        // Link to the youtube video
-        $("#duration").text(duration);
-        // The duration of the video
-        $("#totalmarks").text(Object.keys(e[["bookmarks"]]).length);
-        // The total number of available bookmarks in this video
+    if(Object.keys(e.bookmarks).length==0){
 
-        if(Object.keys(e.bookmarks).length==0){
+        AddEmptyPage();
 
-            AddEmptyPage();
+    }else{
 
-        }else{
+        Object.keys(e.bookmarks).forEach((timestamp,i,arr)=>{
 
-            Object.keys(e.bookmarks).forEach((timestamp,i,arr)=>{
+            $("#content").append(`
 
-                $("#content").append(`
-    
-                <div class="outer-bookmark" id="init-bookmark">
-                    <div class="bookmark">
-                        <div class="time">
-                            <h3>${timestamp}</h3>
-                        </div>
-                        <div class="details">
-                            <p>${e.bookmarks[[timestamp]][["description"]]}</p>
-                        </div>
-                        <div class="tasks">
-                            <div class="load-tasks">
-                                <img src="assets/img/openlink.png" title="Browse clip.">
-                                <img src="assets/img/delete.png" title="Delete bookmark.">
-                                <img src="assets/img/edit.png" title="View and update the bookmark.">
-                            </div>
+            <div class="outer-bookmark" id="init-bookmark">
+                <div class="bookmark">
+                    <div class="time">
+                        <h3>${timestamp}</h3>
+                    </div>
+                    <div class="details">
+                        <p>${e.bookmarks[[timestamp]][["description"]]}</p>
+                    </div>
+                    <div class="tasks">
+                        <div class="load-tasks">
+                            <img src="assets/img/openlink.png" title="Browse clip.">
+                            <img src="assets/img/delete.png" title="Delete bookmark.">
+                            <img src="assets/img/edit.png" title="View and update the bookmark.">
                         </div>
                     </div>
                 </div>
-    
-                `);
-    
-            });
+            </div>
 
-        }
+            `);
 
-        bindBookMarkEvents();
+        });
 
-    });
+    }
+
+    bindBookMarkEvents();
 
 });

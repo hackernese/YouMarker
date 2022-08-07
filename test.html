@@ -7,180 +7,19 @@
     <title>Document</title>
 </head>
 <body>
-
-
-    <div id="root">
-
-        <label>Cool text</label>
-
-    </div>
-
     
-
-    <style>
-
-        *{
-            margin : 0;
-            padding : 0;
-            height : 100%;
-        }
-
-
-        #root{
-
-            color : white; 
-            background-color : grey;
-            height : 100%;
-
-        }
-
-        .notify-ymt{
-            position: sticky;
-            z-index: 10000000;
-            bottom : 7%;
-            height : 100px;
-            width : 100%;
-        }
-
-        @keyframes popup {
-            from{
-                opacity: 0;
-                transform: translateY(-42px);
-            }to{
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .errorbox, .successbox{
-            display : grid; 
-            grid-template-areas: 
-                'image titlebar'
-                'image message_'
-                'load load'
-            ;
-            width: 300px;
-            border-radius: 5px 5px 5px 5px;
-            height : auto;
-            margin : auto;
-            grid-template-columns: auto 1fr;
-            grid-template-rows: auto 2fr 2px;
-            color : azure;
-            overflow : hidden;
-            animation : popup 0.7s forwards;
-        }
-
-        .errorbox{
-            background-color: tomato;
-        }
-
-        .successbox{
-            background-color: #42ba9c;
-        }
-
-        .errorbox #title::after{
-            content : "Operation failed.";
-        }
-        .successbox #title::after{
-            content : "Operation success.";
-        }
-        .successbox img{
-            content : url("assets/img/ok.png");
-        }
-        .errorbox img{
-            content : url("assets/img/fail.png");
-        }
-
-        .notify-ymt #title{
-            grid-area: titlebar;
-            font-size: 20px;
-            height : auto;
-            padding-bottom: 5px;
-            padding-top : 8px;
-            border-bottom: 2px solid rgba(240, 255, 255, 0.489);
-            width : 90%;
-        }
-        .notify-ymt p{
-            grid-area: message_;
-            padding-top: 10px;
-            padding-right: 8px;
-            padding-bottom: 10px;
-            font-size: 14px;
-            word-wrap: break-word;
-            overflow: hidden;
-        }
-        .notify-ymt img{
-            grid-area: image;
-            height : 50px;
-            width : 50px;
-            -webkit-filter: invert(100%);
-            filter : invert(100%);
-            margin : auto;
-            margin-top: 15px;
-            margin-right: 10px;
-            margin-left: 10px;
-        }
-
-        @keyframes reduceit {
-            from{
-                width: 100%;
-            }to{
-                width: 0%;
-            }
-        }
-
-        .notify-ymt #loader{
-            outline : 2px solid rgba(240, 255, 255, 0.601);
-            background-color: rgba(240, 255, 255, 0.601);
-            width: 100%;
-            grid-area: load;
-            animation : reduceit 5s forwards;
-
-        }
-
-        @keyframes loadoff_animation {
-            from{
-                opacity: 1;
-                transform: 0;
-            }to{
-                opacity: 0;
-                transform: translateY(-5rem);
-            }
-        }
-
-        .loadoff{
-            animation : loadoff_animation 0.7s forwards;
-        }
-
-    </style>
-
-    <script src="assets/jquery.js"></script>
+    <button id="btn">ASD</button>
 
     <script>
 
-        // setTimeout(()=>{
-            
-        //     $(".notify-ymt > div").addClass("loadoff");
-        //     setTimeout(()=>{
+        document.getElementById("btn").addEventListener("click", ()=>{
 
+            console.log("Hello there");
 
-                
-        //     }, 700);
-
-        // }, 1000);
+        });
 
 
     </script>
 
 </body>
-<div class="notify-ymt">
-
-    <div class="successbox">
-        <img/>
-        <label id="title"></label>
-        <p id="message">Successfully added new bookmark with timestamp at 10:22:33.</p>
-        <div id="loader"></div>
-    </div>
-    
-</div>
 </html>

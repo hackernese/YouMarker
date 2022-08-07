@@ -18,8 +18,8 @@ const loadIcon = async ()=>{
     butn.classList.add("ytp-button");
     butn.style.width = "40px";
     butn.innerHTML = `
-    <div id="youbookmark-div">
-        <img src="${chrome.runtime.getURL('assets/img/bookmark-youtube.png')}" class='img-1-ymark'>
+    <div id="youbookmark-div" >
+        <img src="${chrome.runtime.getURL('assets/img/bookmark-youtube.png')}" class='img-1-ymark' title="Bookmark this timestamp.">
     </div>
     `;    
     
@@ -47,6 +47,20 @@ const TimestampExistAlert = (ctimestamp)=>{
 
 };
 
+
+function RemoveMenu(){
+    $j(".ymark-menu-bookmark").addClass("fadeout_ymark");
+
+    setTimeout(function(){
+
+        if(!is_played)
+            $j("video")[0].play();
+
+        video_container.children().last().remove();
+
+    }, 300);
+}
+
 function BookmarkFormBind(vidid, timestamp, ctimestamp){
 
     // Binding some HTML elements to some events and tweaking some stuffs when a user wish
@@ -55,8 +69,7 @@ function BookmarkFormBind(vidid, timestamp, ctimestamp){
     $j(".ymark-menu-bookmark").children().last()
     $j(".ymark-menu-bookmark").children().last()[0].style.display = "none";
 
-    $j(".ymark-menu-bookmark").append(
-    `
+    $j(".ymark-menu-bookmark").append(`
     <div class="add-mark-div">
         <div>
             <label>${document.querySelectorAll(query_title)[1].innerHTML}</label>
@@ -68,14 +81,12 @@ function BookmarkFormBind(vidid, timestamp, ctimestamp){
             <textarea id='reminder-template' placeholder="Reminder..."></textarea>
             <label id="y-save-text">Ctrl - Enter to save.</label>
         </div>
-        
         <div class="confirm-tasks-btn">
-            <button id="cancel">Back</button>
+            <button id="cancel">Close</button>
             <button id="save">Save</button>
         </div>
     </div>
-    `
-    );
+    `);
 
     $j("#reminder-template").ready(()=>{
 
@@ -103,9 +114,10 @@ function BookmarkFormBind(vidid, timestamp, ctimestamp){
 
             // CANCEL BUTTON
 
-            $j(".ymark-menu-bookmark").children().last().remove();
+            $j(".dmark-root-div").removeClass("appear-dmark");
+            $j(".dmark-root-div").addClass("disappear-dmark");
 
-            $j(".ymark-menu-bookmark").children().last()[0].style.display = "flex";
+            RemoveMenu();
 
         });
 
@@ -175,12 +187,11 @@ function BookmarkFormBind(vidid, timestamp, ctimestamp){
 
                     $j(".confirm-tasks-btn #cancel").click();
 
-                    $j(".ymark-menu-bookmark").remove();
-
                     notify("ok", `Created bookmark for timestamp "${ctimestamp}".`);
 
                     if(!is_played)
                         $j("video")[0].play();
+
 
                 });
 
@@ -202,7 +213,7 @@ function BookmarkFormBind(vidid, timestamp, ctimestamp){
         });
 
     });
-}
+} 
 
 const popup_menu = async ()=>{
 
@@ -210,98 +221,41 @@ const popup_menu = async ()=>{
 
     utility_box.classList.add("ymark-menu-bookmark");
 
-    utility_box.innerHTML = `
-    <div class="dmark-root-div appear-dmark">
-
-        <div class='ymark-div2'>
-            
-            <div class="d" id="bookmark-save-btn">
-                <div class="dmark-task-img">
-                    <img src="${chrome.runtime.getURL('assets/img/bookmark-add.png')}" class='task-image-ymark'>
-                </div>
-                <label id="dmark-task-word">Save</label>
-            </div>
-
-            <div class="d" id="bookmark-notify-btn">
-                <div class="dmark-task-img">
-                    <img src="${chrome.runtime.getURL('assets/img/notification.png')}" class='task-image-ymark'>
-                </div>
-                <label id="dmark-task-word">Notify</label>
-            </div>
-
-        </div>
-
-        <div class='ymark-div3'>
-            <label>Close</label>
-        </div>
-
-    </div>
-    
-    `;
+    utility_box.innerHTML = `<div class="dmark-root-div appear-dmark"></div>`;
 
     video_container.append(utility_box);
 
-    $j(".ymark-div3").bind("click", (e)=>{
+    let url = window.location.href.split("?")[1];
+    let urlparser = new URLSearchParams(url);
+    let vidid = urlparser.get("v");
+    // Splitting the current youtube's id first since it's gonna be used multiple times
+    // later in this script...
 
-        $j(".dmark-root-div").removeClass("appear-dmark");
-        $j(".dmark-root-div").addClass("disappear-dmark");
+    let timestamp = parseInt($j(".video-stream")[0].currentTime);
+    let ctimestamp = getTime(timestamp);
+    // The current timestamp the video has been paused at
 
-        $j(".ymark-menu-bookmark").addClass("fadeout_ymark");
+    chrome.storage.sync.get([db], (items)=>{
 
-        setTimeout(function(){
+        if(items===undefined)return;
 
-            if(!is_played)
-                $j("video")[0].play();
+        let {order, videos} = Object.values(items)[0];
 
-            video_container.children().last().remove();
+        if(videos[vidid]!==undefined){
+            if(videos[vidid].bookmarks.hasOwnProperty(ctimestamp)){
 
-        }, 300);
+                $j(".ymark-menu-bookmark").remove();
+                // Removing the entire bookmark section before popping an alert
 
-    });
-
-    $j("#bookmark-save-btn").bind("click", (e)=>{
-
-        // When the user decides to save back a bookmark
-
-        let url = window.location.href.split("?")[1];
-        let urlparser = new URLSearchParams(url);
-        let vidid = urlparser.get("v");
-        // Splitting the current youtube's id first since it's gonna be used multiple times
-        // later in this script...
-
-        let timestamp = parseInt($j(".video-stream")[0].currentTime);
-        let ctimestamp = getTime(timestamp);
-        // The current timestamp the video has been paused at
-
-        chrome.storage.sync.get([db], (items)=>{
-
-            if(items===undefined)return;
-
-            let {order, videos} = Object.values(items)[0];
-
-            if(videos[vidid]!==undefined){
-                if(videos[vidid].bookmarks.hasOwnProperty(ctimestamp)){
-
-                    $j(".ymark-menu-bookmark").remove();
-                    // Removing the entire bookmark section before popping an alert
-
-                    TimestampExistAlert(ctimestamp);
-                    // Popping an alert
-                    
-                    return;
-                    
-                }
+                TimestampExistAlert(ctimestamp);
+                // Popping an alert
+                
+                return;
+                
             }
+        }
 
-            BookmarkFormBind(vidid, timestamp, ctimestamp);
-
-        });    
-    });
-
-    $j("#bookmark-notify-btn").bind("click", (e)=>{
-
-        // When the user decides to add the video to the notify list
-        
+        BookmarkFormBind(vidid, timestamp, ctimestamp);
 
     });
 
@@ -319,6 +273,9 @@ $j("video").ready(function(){
 });
 
 const load_fonts = async ()=>{
+
+    // Loadng custom fonts inside the video 
+
     $j("head").append(`
 
     <style>
@@ -339,14 +296,20 @@ const load_fonts = async ()=>{
     `);
 }
 
-$j(".ytp-right-controls").ready(function() {
-
-    youtubebar = $j(".ytp-right-controls");
-    
-});
-
 
 function notify(type, msg){
+
+    // This function is used to create a notification box at the bottom of the youtube video
+    // This box takes in two parameters which is "type" and "msg"
+
+    /*
+
+        type : Type of message this is
+            => "error" : error messages
+            => "ok" : Success messages
+        msg : the message the user wishes to display.
+ 
+    */
 
     const img = (
         type=="error" ? 
@@ -388,9 +351,12 @@ function notify(type, msg){
 (()=>{
 
     load_fonts();
+    // Loadng existing fonts into the system here
     
 
     chrome.runtime.onMessage.addListener((obj, sender, resp)=>{
+
+        // Recieving message when a new youtube tab is created.
         
         const {type, id} = obj;
 
@@ -424,8 +390,13 @@ function notify(type, msg){
 
     });
 
-    
-
 
 })();
 
+
+
+$j(document).ready(()=>{
+
+    console.log("WTF");
+    $j('*').unbind('keyup keydown keypressed');
+})
