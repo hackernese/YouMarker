@@ -5,19 +5,61 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    
+    <style>
+
+        body{
+            height : 100%;
+            background-color: aliceblue;
+        }
+
+
+    </style>
+
+
 </head>
 <body>
     
-    <button id="btn">ASD</button>
+    <button id="btn">Stop propagation</button>
+
+    <button id="activate">Active me</button>
 
     <script>
 
-        document.getElementById("btn").addEventListener("click", ()=>{
+        var global_document_event;     
+        var is_defined=false;  
 
-            console.log("Hello there");
+        $("body").on("keydown", (e)=>{
+
+            console.log("ASDS");
 
         });
 
+        $("#btn").on("click", ()=>{
+
+            document.addEventListener("keydown", event => {
+
+                if(!is_defined){
+                    global_document_event = event;
+                    is_defined = true;
+                    
+                    console.log(global_document_event);
+                
+                }
+                event.stopPropagation();
+            
+            }, true);
+
+        });
+
+        $("#activate").on("click", ()=>{
+
+            $(document).trigger(global_document_event);
+
+        });
 
     </script>
 

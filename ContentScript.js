@@ -66,6 +66,12 @@ function BookmarkFormBind(vidid, timestamp, ctimestamp){
     // Binding some HTML elements to some events and tweaking some stuffs when a user wish
     // to open the textarea in order to insert notes into the bookmark
 
+    $j("body").off('keydown');
+    $j("body").off('keypress');
+    $j("body").off('keyup');
+
+    // console.log(getEventListeners($j("body")[0]));
+
     $j(".ymark-menu-bookmark").children().last()
     $j(".ymark-menu-bookmark").children().last()[0].style.display = "none";
 
@@ -104,6 +110,16 @@ function BookmarkFormBind(vidid, timestamp, ctimestamp){
         });
 
         $j("#reminder-template").focus();
+
+        
+        // Gotta find a way to do this in JQUery to blend in :P
+        
+        document.getElementById("reminder-template").addEventListener("keydown", (event)=>{
+
+            event.stopPropagation();
+            // Prevent the child element from bubbling upward
+
+        });
 
     });
 
@@ -393,10 +409,3 @@ function notify(type, msg){
 
 })();
 
-
-
-$j(document).ready(()=>{
-
-    console.log("WTF");
-    $j('*').unbind('keyup keydown keypressed');
-})

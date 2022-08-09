@@ -8,7 +8,7 @@
     ;
     gap : 10px;
     grid-template-columns: auto 3fr;
-    grid-template-rows: 16px auto auto;
+    grid-template-rows: 20px auto auto;
     padding : 13px;
 
 }

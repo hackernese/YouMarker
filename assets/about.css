@@ -28,6 +28,7 @@ body{
 }
 
 #header{
+    box-shadow: 5px 15px 14px rgba(0,0,0,0.33);
     display : flex;
     justify-content: center;
     padding : 20px;
@@ -37,6 +38,7 @@ body{
 
 }
 #header > h1{
+    text-shadow: 2px 2px 4px #000000;
     margin-top : auto;
     margin-bottom : auto;
 }
@@ -47,16 +49,34 @@ body{
 }
 
 .description{
+    display : grid;
+    grid-template-areas: 
+        "title title"    
+        "paragraph popupimg"
+    ;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    gap : 10px;
+}
+.description{
     margin-top: 20px;
 }
 .description > h2{
+    
+    grid-area: title;
     color : rgb(76, 182, 111);
     padding-bottom: 5px;
     margin-bottom: 10px;
 }
-
+.description > img{
+    box-shadow: 15px 0 17px rgba(0,0,0,0.33);
+    grid-area: popupimg;
+    border-radius: 5px 5px 5px 5px;
+    border : 2px solid rgba(240, 255, 255, 0.212);
+}
 .description > p{   
-    font-family: ThirdFont;
-    line-height: 25px;
+    grid-area: paragraph;
+    font-family: HeaderFont;
+    line-height: 20px;
     color : azure;
 }
