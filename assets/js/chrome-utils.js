@@ -221,7 +221,72 @@ export function ResetContentPage(f){
 
 }
 
-export function AddVideoContentByPage(page, is_normal){
+export function CalculatePage(index, f){
+
+    /*
+
+        This function base on the "index" being provided and it will
+        calculate the current page that "index" is staying on and also
+        what is the index of that element inside the calculated page ?
+
+        index : index of the element as a whole in the entire order array
+        f     : Callback function
+
+        Returns : [int, int]
+                --> int[0] : The page the element is staying on, if it doesn't exist, return -1
+                --> int[1] : The index of the element inside that page
+
+    */
+
+    chrome.storage.sync.get([db], (e)=>{
+
+        console.log(index);
+
+        const length = Object.values(e)[0].order.length; // Getting the length of orders
+        const totalpage = Math.ceil(length/10);          // Calculate the total amount of pages
+        const current_page = Math.ceil((index+1)/10);    // The current page that "index" stays on
+        const p_index = (index+1)%10==0 ? 9 : (index%10); // Getting the index of the element in the new page
+
+        if(current_page>totalpage)
+            return [-1,-1] // Invalid result
+            
+        f([current_page, p_index]);
+
+    });
+
+}
+
+
+export function ResetCurrentPage(p){
+
+    /*
+
+        Resetting the bottom section which holds the informatoin about 
+        what page we are standing on and what is the total amount of 
+        pages that exists.
+
+        p => The page that we are currently standing on rn
+
+        Results : if "p" is valid, it is gonna reset it, if not it is going to ignore it
+
+    */
+
+    chrome.storage.sync.get([db], (ret)=>{
+
+        const totalpage = Object.values(ret)[0].order.length;
+
+        $("#totalpage").html( Math.ceil(totalpage/10) );
+
+        if(p>totalpage)return;
+
+        $("#currentpage").html(p);
+
+    });
+
+
+}
+
+export function AddVideoContentByPage(page, is_normal, clicked_index){
 
     /*
 
@@ -232,6 +297,8 @@ export function AddVideoContentByPage(page, is_normal){
         page : the page the user wishes to extract and reset to
         is_normal : if it's true then there won't be any fade-in animation
                     to the newly added videos, if false then yes.
+        clicked_index : if it's true then the index at "clicked_index" will 
+                        be added with a new "clicked" class.
 
     */
 
@@ -268,13 +335,26 @@ export function AddVideoContentByPage(page, is_normal){
 
         reset_videofull();
 
+
+        if(clicked_index!==undefined){
+
+            // Reclick the element after being refreshed
+
+            const e = document.getElementById("content").children[clicked_index];
+
+            e.click();
+
+            e.scrollIntoView({block: "center", inline: "nearest"});
+
+        }
+
     });
 
 }
 
 
 
-function clear_storage(){
+export function clear_storage(){
 
     // CLearing all of the data inside the storage
 

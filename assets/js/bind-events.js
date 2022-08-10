@@ -14,7 +14,10 @@ import {
 
 import {
     ResetContentPage,
-    DeleteVideoById
+    DeleteVideoById,
+    db,
+    AddVideoContentByPage,
+    CalculatePage
 } from "./chrome-utils.js";
 
 export function ResetVideodbclick(){
@@ -62,7 +65,6 @@ export function ResetVideoSingleClick(){
 
     $(".youtube-videos").bind("click", (event)=>{
 
-
         let div = event.currentTarget;
 
         let selected = $(".vidclicked");
@@ -95,7 +97,6 @@ export function ResetVideoSingleClick(){
     });
 }
 
-
 export function BindClickEventActionBtn(){
 
     // Binding click events to action buttons such as "View",
@@ -103,7 +104,7 @@ export function BindClickEventActionBtn(){
 
     $("#actions-btns img").bind("click", (e)=>{
 
-        const video = $(".shrink")[0];
+        const video = $(".clicked")[0];
         const videoID = video.id;
         const action = e.currentTarget.id;
 
@@ -132,13 +133,92 @@ export function BindClickEventActionBtn(){
 
             });
         
-        }else if(action=="notifybtn"){
+        }else if(action=="movedown"){
 
-            // OPen up the notifying setting in order to put a notification
-            // onto this video 
+            chrome.storage.sync.get([db], (data)=>{
+
+                let values = Object.values(data)[0].order;   // Getting the total list of all videos IDs
+                let current_index = values.indexOf(videoID); // Extracting the current index inside that list
+                let length = values.length;                  // Getting the length of the list
+
+                if(current_index==length-1){
+                    
+                    // If the user wishes to move it downward
+                    // but it's already at the end of the order list
+                    // then this is invalid.
+
+                    console.log("/* Already at the end of the list.");
+                    return;
+                }
+
+                [
+                    values[current_index], 
+                    values[current_index+1] 
+                ] = [
+                    values[current_index+1], 
+                    values[current_index] 
+                ]
+                // Swapping value of the current index and current index + 1
+                
+                CalculatePage(current_index+1, (ret)=>{
+
+                    if(ret[0]==-1) return;
+
+                    chrome.storage.sync.set({[db] : Object.values(data)[0]}, ()=>{
+
+                        AddVideoContentByPage(ret[0], true, ret[1]);
+    
+                    });
+    
+                });
+
+                
+
+            });
         
-            console.log(1);
-        
+        }else if(action=="moveup"){
+
+            chrome.storage.sync.get([db], (data)=>{
+
+                let values = Object.values(data)[0].order;   // Getting the total list of all videos IDs
+                let current_index = values.indexOf(videoID); // Extracting the current index inside that list
+                let length = values.length;                  // Getting the length of the list
+
+                if(current_index==0){
+                    
+                    // If the user wishes to move it upward
+                    // but it's already at the first index of the order list
+                    // then this is invalid.
+
+                    console.log("/* Already at the beginning of the list.");
+                    return;
+                }
+
+                [ 
+                    values[current_index], 
+                    values[current_index-1] 
+                ] = [
+                    values[current_index-1], 
+                    values[current_index] 
+                ]
+                // Swapping value of the current index and current index + 1
+
+                CalculatePage(current_index-1, (ret)=>{
+                    
+                    if(ret[0]==-1) return;
+
+                    chrome.storage.sync.set({[db] : Object.values(data)[0]}, ()=>{
+
+                        AddVideoContentByPage(ret[0], true, ret[1]);
+    
+                    });
+    
+                });
+
+                
+
+            });
+
         }
 
     });

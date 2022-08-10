@@ -2,7 +2,8 @@ import {
     extract_all_videos,
     AddVideoContentByPage,
     db,
-    AddPageEmptyMessage
+    AddPageEmptyMessage,
+    clear_storage
 } from "./chrome-utils.js";
 
 import {
@@ -138,3 +139,5 @@ extract_all_videos((ret)=>{
 });
 
 BindClickEventActionBtn();
+
+// clear_storage();

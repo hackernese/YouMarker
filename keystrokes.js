@@ -38,6 +38,7 @@ const open_bookmark_menu = async (e)=>{
 
             // Press Ctrl - I again to close it
 
+
             if($j(".ymark-menu-bookmark")[0]){
                 
                 // Checking if the user has previously opened the 
