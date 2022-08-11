@@ -61,6 +61,7 @@ function RemoveMenu(){
     }, 300);
 }
 
+
 function BookmarkFormBind(vidid, timestamp, ctimestamp){
 
     // Binding some HTML elements to some events and tweaking some stuffs when a user wish
@@ -111,6 +112,17 @@ function BookmarkFormBind(vidid, timestamp, ctimestamp){
 
         $j("#reminder-template").focus();
 
+        $j("#reminder-template").keydown((e)=>{
+    
+            if (e.ctrlKey && e.keyCode == 73) {
+
+                // Detecting the "Close" key combination Ctrl - I
+
+                $j(".confirm-tasks-btn #cancel").click(); 
+            
+            }
+        
+        });
         
         // Gotta find a way to do this in JQUery to blend in :P
         

@@ -20,8 +20,9 @@ chrome.runtime.onInstalled.addListener((reason) => {
     if (reason === chrome.runtime.OnInstalledReason.INSTALL) {
     
         // WHen the user firsts install the extensions
-        //   chrome.tabs.create({
-    //     url: 'onboarding.html'
-    //   });
+        chrome.tabs.create({
+            url: 'about.html'
+        });
+
     }
 });
