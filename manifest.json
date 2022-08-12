@@ -4,7 +4,7 @@
     "description":"Bookmarking youtube timestamp",
     "version":"0.1.0",
     "host_permissions" : ["https://www.youtube.com/watch?*"],
-    "permissions":["storage", "tabs", "notifications"] ,
+    "permissions":["storage", "tabs"] ,
 
     "content_scripts":[
         {

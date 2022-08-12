@@ -301,6 +301,8 @@ function set_clicked_bookmark(event){
     $("#page-num").css("display", "none");     // Hiding the page number section 
     $("#actions-btns").addClass("tasks-bar");  // Adding the styling of "tasks-bar" to the action buttons
 
+    
+
     setTimeout(()=>{
 
         $("#actions-btns").removeClass("tasks-bar")
@@ -310,6 +312,91 @@ function set_clicked_bookmark(event){
     }, 600);
 }
 
+
+export function keystrokes_capture(){
+
+    /*
+
+        Recording keystrokes being performed on the DOM and see
+        what to do with it
+
+    */
+
+    
+
+    $(document).keydown((e)=>{
+
+        const temp = $(".clicked");
+        let citem=undefined,parent=undefined, index_item=undefined;
+
+        if(temp.length>0){
+            citem = temp[0];
+            parent = Array.from(citem.parentNode.children);
+            index_item = parent.indexOf(citem);
+        }
+
+        switch(true){
+
+            case e.shiftKey && e.keyCode==38:
+
+                if(citem)
+                    $("#actions-btns")[0].children[3].click()
+
+                break;
+
+            case e.shiftKey && e.keyCode==40:
+
+                if(citem)
+                    $("#actions-btns")[0].children[0].click()
+
+                break; 
+
+            case e.keyCode==38:
+
+                // Moving up a notch from the currently selected item.
+
+                if(index_item==0)
+                    return;
+
+                parent[index_item-1].click();
+
+                break;
+
+            case e.keyCode==40:
+
+                // Moving down a notch from the currently selected item.
+
+                if(index_item+1==parent.length)
+                    return; 
+
+                parent[index_item+1].click();
+
+                break;
+
+            case e.ctrlKey && e.keyCode==13:
+
+                if(citem)
+                    $("#actions-btns")[0].children[1].click()
+
+                break;
+
+            case e.keyCode==13:
+
+                if(citem)
+                    $(citem).dblclick();                  
+            
+                break;
+
+            default:
+                // console.log(e.keyCode);
+                break;
+
+        }
+
+    });
+    
+
+}
 
 export function reset_videofull(){
 

@@ -12,7 +12,8 @@ import {
 
 import {
     nextprevButtonsBindEvent,
-    BindClickEventActionBtn
+    BindClickEventActionBtn,
+    keystrokes_capture
 } from "./bind-events.js";
 var selected_mark;
 
@@ -81,6 +82,7 @@ $("#content").on("click", (event)=>{
 
 });
 
+
 extract_all_videos((ret)=>{
 
     if(ret===undefined || ret.order.length==0){
@@ -138,6 +140,9 @@ extract_all_videos((ret)=>{
     
 });
 
+
 BindClickEventActionBtn();
+
+keystrokes_capture();
 
 // clear_storage();
