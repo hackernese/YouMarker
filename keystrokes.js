@@ -30,8 +30,6 @@ const open_bookmark_menu = async (e)=>{
 
     $j(document).keydown((e)=>{
 
-        console.log("WHATEVER");
-
 
         if (e.ctrlKey && e.keyCode == 73) {
 

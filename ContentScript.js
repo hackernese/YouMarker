@@ -67,12 +67,6 @@ function BookmarkFormBind(vidid, timestamp, ctimestamp){
     // Binding some HTML elements to some events and tweaking some stuffs when a user wish
     // to open the textarea in order to insert notes into the bookmark
 
-    $j("body").off('keydown');
-    $j("body").off('keypress');
-    $j("body").off('keyup');
-
-    // console.log(getEventListeners($j("body")[0]));
-
     $j(".ymark-menu-bookmark").children().last()
     $j(".ymark-menu-bookmark").children().last()[0].style.display = "none";
 
@@ -289,16 +283,42 @@ const popup_menu = async ()=>{
 
 }
 
-$j(".html5-video-player").ready(function(){video_container = $j(".html5-video-player");});
+function GetDOMReady(f){
+    
+    /*
 
-$j("video").ready(function(){
-    $j("video").on("play", ()=>{
-        is_played = true;
+        This function will do some necessary DOM manipulation like grabbing the element
+        of .html5-video-player and also binding necessary function to "play" and "pause"
+        events on the main <video>. before executing the callback function f(...)
+
+        f => Callback function after successfully grabbing the element.
+
+    */
+
+    $j("video").ready(function(){
+        $j("video").on("play", ()=>{
+            is_played = true;
+        });
+        $j("video").on("pause", ()=>{
+            is_played = false;
+        });
     });
-    $j("video").on("pause", ()=>{
-        is_played = false;
+
+    // binding play + pause event to <video> ^^^^
+
+    $j(".html5-video-player").ready(()=>{
+        
+        video_container = $j(".html5-video-player");
+        
+        f();
+
     });
-});
+
+}
+
+GetDOMReady(()=>{});
+
+
 
 const load_fonts = async ()=>{
 
@@ -376,21 +396,15 @@ function notify(type, msg){
 
 }
 
-(()=>{
+function SendMessageBackGround(){
 
-    load_fonts();
-    // Loadng existing fonts into the system here
-    
+    // Called when the ContentScript is ready and it will send back a message
+    // to the Background script to notify it that this is ready and will load 
+    // the icon into the utility bars afterward.
 
-    chrome.runtime.onMessage.addListener((obj, sender, resp)=>{
+    chrome.runtime.sendMessage("READY",(response) => {
 
-        // Recieving message when a new youtube tab is created.
-        
-        const {type, id} = obj;
-
-        if(type==="NEWVID"){
-            
-            // Loading the extension button into the video bar
+        if(response==="NEWVID"){
 
             $j(".ytp-right-controls").ready(function() {
 
@@ -398,10 +412,50 @@ function notify(type, msg){
                 loadIcon();
                 
             });
-
         }
-
+  
     });
+}
+
+async function MonitorURLChange(){
+
+    /*
+
+        The content script can only be available in two hosts 
+            1. youtube.com/watch?v=<id>
+            2. youtune.com/
+
+        The valid route is /watch?v but if the user chooses to go with a different 
+        route rather than /watch?v, this function will be called and it will wait
+        until the user finally choose to switch to a video, only then it will 
+        GetDOMReady(...) in order to grab the necessary HTML elements
+        and calling SendMessageBackGround(...) afterward to notify the background
+        script of new changes...
+
+    */
+
+    while((new URL(window.location.href)).pathname !== "/watch" ){
+        await new Promise(r => setTimeout(r, 200));
+    }
+
+    GetDOMReady(SendMessageBackGround);
+
+    // Similar to
+    /*
+    GetDOMReady(()=>{
+
+        SendMessageBackGround();
+
+    })
+    */
+
+}
+
+(()=>{
+
+    load_fonts();   // Loadng existing fonts into the system here
+
+    window.location.href.startsWith("https://www.youtube.com/watch") ? SendMessageBackGround() : MonitorURLChange();
 
 
     chrome.storage.sync.get([db], (e)=>{

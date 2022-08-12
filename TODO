@@ -1,0 +1,1 @@
+-> Figuring out how to detect route changes for /watch?v=ID faster rather than using an async function with infinite loop.
