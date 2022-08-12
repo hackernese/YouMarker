@@ -2,7 +2,7 @@
 
     "name" : "YouMarker",
     "description":"Bookmarking youtube timestamp",
-    "version":"0.1.0",
+    "version":"1.0.0",
     "host_permissions" : ["https://www.youtube.com/watch?*"],
     "permissions":["storage", "tabs"] ,
 
