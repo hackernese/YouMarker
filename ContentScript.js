@@ -451,7 +451,7 @@ async function MonitorURLChange(){
 
 }
 
-(()=>{
+$j(document).ready(()=>{
 
     load_fonts();   // Loadng existing fonts into the system here
 
@@ -472,6 +472,5 @@ async function MonitorURLChange(){
 
     });
 
-
-})();
+})
 
