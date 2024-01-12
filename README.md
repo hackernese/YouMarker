@@ -1,6 +1,6 @@
 # <img src="./assets/img/AboutIcon.png" width=40px height=40px > YouMarker <sup>( v1.0.0 )</sup>
 YouMarker or YoutubeMarker is a chrome extension which can help you keeping track of your youtube videos in an easy and viewable manner. Each bookmark will be separated and categorized into a collection of save-back bookmarks corresponding to a specific video.
-- [ ] Soon will be available in Chrome Web Store.
+- [X] Available on Chrome Web Store - [Link](https://chromewebstore.google.com/detail/youmarker/pbhjjgbjgeojflekigakomlbdephflaa).
 
 ---
 
